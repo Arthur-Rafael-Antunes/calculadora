@@ -1,22 +1,69 @@
+# Import Module
+from PySimpleGUI import *
+
 import PySimpleGUI as sg
 
-sg.theme('Reddit')  # Let's set our own color theme
-
+sg.theme('Reddit')
 
 layout = [ 
-            [sg.Input('', key='-DISPLAY-', size=(12,1))],
-            [sg.B('7', key='7'),sg.B('8', key='8'),sg.B('9', key='9'),sg.B('/', key='/')],
-            [sg.B('4', key='4'),sg.B('5', key='5'),sg.B('6', key='6'),sg.B('*', key='*')],
-            [sg.B('1', key='1'),sg.B('2', key='2'),sg.B('3', key='3'),sg.B('-', key='-')],
-            [sg.B('.', key='.'),sg.B('0', key='0'),sg.B('=', key='='),sg.B('+', key='+')],
+    [sg.Input('', key='-DISPLAY-', size=(15, 1)) ],
+    [sg.Button('C', key='C', size=(3,1)), sg.Button('()',key='()',size=(3,1)), sg.Button('%', key="%", size=(3,1)), sg.Button('/', key='/', size=(3,1))],
+    [sg.Button('7', key='7',size=(3,1)), sg.Button('8', key='8',size=(3,1)), sg.Button('9', key='9',size=(3,1)), sg.Button('*', key='*',size=(3,1))], 
+    [sg.Button('4', key='4',size=(3,1)), sg.Button('5', key='5',size=(3,1)), sg.Button('6', key='6',size=(3,1)), sg.Button('-', key='-',size=(3,1))],
+    [sg.Button('1', key='1',size=(3,1)), sg.Button('2', key='2',size=(3,1)), sg.Button('3', key='3',size=(3,1)), sg.Button('+', key='+', size=(3,1))],
+    [sg.Button('+/-', key='plus_minus', size=(3,1)), sg.Button('.', key='.',size=(3,1)), sg.Button('0', key='0',size=(3,1)), sg.Button('=', key='=',size=(3,1))],
 ]
 
-window = sg.Window('Calc 3Ia',layout,font="monospace 30")
+window = sg.Window('Calc 3Ia', layout, font="monospace 30")
 
-exp=''
+exp = ''
 
 while True:
-    event, values = window.read()   
+    event, values = window.read()
+    if event == sg.WINDOW_CLOSED:
+        break
+    elif event in '1234567890':
+        exp += event
+        window['-DISPLAY-'].update(exp)
+    elif event == '=':
+        try:
+            result = eval(exp)  # Avalia a expressão matemática
+            window['-DISPLAY-'].update(str(result))
+            exp = str(result)  # Define a expressão como o resultado para cálculos subsequentes
+        except:
+            window['-DISPLAY-'].update('Erro')
+            exp = ''
+    elif event == 'C':
+        exp = ''
+        window['-DISPLAY-'].update(exp)
+    elif event == 'Backspace':
+        exp = exp[:-1]
+        window['-DISPLAY-'].update(exp)
+    elif event == 'plus_minus':
+        if exp and exp[0] == '-':
+            exp = exp[1:]
+        else:
+            exp = '-' + exp
+        window['-DISPLAY-'].update(exp)
+    elif event == '()': #ainda não funciona como deveria
+        exp += '('
+        window['-DISPLAY-'].update(exp)
+        exp += ')'
+        window['-DISPLAY-'].update(exp)
+    elif event == '%':
+        try:
+            result = eval(exp) / 100  # Avalia a expressão matemática e divide por 100 para obter o valor percentual
+            window['-DISPLAY-'].update(str(result))
+            exp = str(result)  # Define a expressão como o resultado para cálculos subsequentes
+        except:
+            window['-DISPLAY-'].update('Erro')
+            exp = ''
+    else:
+        exp += event
+        window['-DISPLAY-'].update(exp)
+
+window.close()
+
     print(event, values)
     if event == sg.WIN_CLOSED :     
       break
