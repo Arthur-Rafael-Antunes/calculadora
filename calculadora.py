@@ -1,20 +1,19 @@
-# Import Module
 from PySimpleGUI import *
 
 import PySimpleGUI as sg
 
-sg.theme('Reddit')
+sg.theme('DarkTeal6')
 
 layout = [ 
-    [sg.Input('', key='-DISPLAY-', size=(15, 1)) ],
-    [sg.Button('C', key='C', size=(3,1)), sg.Button('()',key='()',size=(3,1)), sg.Button('%', key="%", size=(3,1)), sg.Button('/', key='/', size=(3,1))],
+    [sg.Input('', key='-DISPLAY-', size=(17, 1)) ],
+    [sg.Button('C', key='C',size=(3,1)), sg.Button('<-', key='Backspace',size=(3,1)), sg.Button('%', key="%", size=(3,1)), sg.Button('/', key='/', size=(3,1))],
     [sg.Button('7', key='7',size=(3,1)), sg.Button('8', key='8',size=(3,1)), sg.Button('9', key='9',size=(3,1)), sg.Button('*', key='*',size=(3,1))], 
     [sg.Button('4', key='4',size=(3,1)), sg.Button('5', key='5',size=(3,1)), sg.Button('6', key='6',size=(3,1)), sg.Button('-', key='-',size=(3,1))],
     [sg.Button('1', key='1',size=(3,1)), sg.Button('2', key='2',size=(3,1)), sg.Button('3', key='3',size=(3,1)), sg.Button('+', key='+', size=(3,1))],
-    [sg.Button('+/-', key='plus_minus', size=(3,1)), sg.Button('.', key='.',size=(3,1)), sg.Button('0', key='0',size=(3,1)), sg.Button('=', key='=',size=(3,1))],
+    [sg.Button('+/-', key='plus_minus', size=(3,1)), sg.Button('0', key='0',size=(3,1)),  sg.Button('.', key='.',size=(3,1)), sg.Button('=', key='=',size=(3,1))],
 ]
 
-window = sg.Window('Calc 3Ia', layout, font="monospace 30")
+window = sg.Window('Calc 3Ia', layout, font="monospace 30", element_justification='center')
 
 exp = ''
 
@@ -45,11 +44,6 @@ while True:
         else:
             exp = '-' + exp
         window['-DISPLAY-'].update(exp)
-    elif event == '()': #ainda não funciona como deveria
-        exp += '('
-        window['-DISPLAY-'].update(exp)
-        exp += ')'
-        window['-DISPLAY-'].update(exp)
     elif event == '%':
         try:
             result = eval(exp) / 100  # Avalia a expressão matemática e divide por 100 para obter o valor percentual
@@ -62,12 +56,4 @@ while True:
         exp += event
         window['-DISPLAY-'].update(exp)
 
-window.close()
-
-    print(event, values)
-    if event == sg.WIN_CLOSED :     
-      break
-    elif event in '1234567890' :
-      exp+=event
-      window['-DISPLAY-'].update(exp)
 window.close()
